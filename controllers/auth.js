@@ -23,6 +23,20 @@ module.exports = {
             });
 
         });
+    },
+
+    login: function(req, res) {
+        User.findOne({email: req.body.email}, function(err, user) {
+            if (!user)
+                return res.status(401).send({message: 'Email or password invalid.'});
+
+            if (req.body.pwd == user.pwd) {
+                console.log(req.body, user.pwd);
+                res.send({token: createToken(user)});
+            } else {
+                return res.status(401).send({message: 'Invalid email and/or password.'});
+            }
+        });
     }
 }
 
